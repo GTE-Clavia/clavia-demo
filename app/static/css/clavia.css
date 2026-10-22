@@ -91,6 +91,23 @@ section + section { border-top: 1px solid var(--linha); }
 .legenda span { display: inline-flex; align-items: center; gap: 6px; }
 .legenda i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
 
+/* radar por habilidade (SVG inline da macro radar e do demo.js) */
+.radar { margin: 16px 0 12px; text-align: center; }
+.radar-svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.radar figcaption { margin-top: 4px; }
+.radar-anel, .radar-eixo { fill: none; stroke: var(--linha); stroke-width: 1; }
+.radar-anel-75 { stroke: var(--ocre); stroke-dasharray: 4 3; }
+.radar-anel-50 { stroke: var(--terracota); stroke-dasharray: 4 3; }
+.radar-area { fill: var(--azul); fill-opacity: 0.14; stroke: var(--azul); stroke-width: 2; stroke-linejoin: round; }
+.radar-ponto { stroke: var(--tinta); stroke-width: 1; }
+.radar .n-consolidada { fill: var(--ocre); }
+.radar .n-desenvolvimento { fill: var(--azul-claro); }
+.radar .n-lacuna { fill: var(--terracota); }
+.radar .n-insuficiente { fill: var(--card); stroke: var(--azul); stroke-dasharray: 2 2; }
+.radar-pendente { fill: var(--card); stroke: var(--muted); stroke-dasharray: 2 2; }
+.radar-rotulo { font: 600 11px var(--f-code); fill: var(--tinta); }
+.radar-escala { font: 500 10px var(--f-texto); fill: var(--muted); }
+
 /* ciclo */
 .ciclo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: passo; }
 .ciclo li { list-style: none; background: var(--card); border: 1px solid var(--linha); border-radius: var(--raio); padding: 20px; position: relative; }

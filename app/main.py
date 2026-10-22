@@ -24,7 +24,7 @@ from app import servico as S
 
 log = logging.getLogger("clavia")
 
-VERSAO = "22/10/2026"
+VERSAO = "22/10/2026 b"
 LIMITE_MB = float(os.environ.get("CLAVIA_LIMITE_MB", "8"))
 LIMITE_BYTES = int(LIMITE_MB * 1024 * 1024)
 FOLGA_MULTIPART = 64 * 1024  # cabecalhos e delimitadores do multipart

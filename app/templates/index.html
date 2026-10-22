@@ -20,6 +20,10 @@
       <div class="barra">
         {% for c in turma.codigos %}{{ m.celula(ex.habilidades[c], c) }}{% endfor %}
       </div>
+      <figure class="radar">
+        {{ m.radar(ex.habilidades, turma.codigos, turma.rotulos) }}
+        <figcaption>Perfil por habilidade · dados sintéticos</figcaption>
+      </figure>
       <p class="pequeno">A nota diz pouco. As células mostram onde agir: reforço em <span class="code">{{ ex.lacunas|join('</span> e <span class="code">'|safe) }}</span>.</p>
     </div>
   </div>

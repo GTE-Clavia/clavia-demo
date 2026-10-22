@@ -18,3 +18,33 @@
   <span><i class="n-insuficiente"></i>poucos itens (menos de 3 válidos)</span>
 </p>
 {%- endmacro %}
+
+{#- Radar do aluno: 4 eixos (as habilidades da prova, na ordem de codigos), 0-100% de acerto.
+    SVG puro, sem JS nem biblioteca (CSP 'self'). static/js/demo.js monta o mesmo desenho para o resultado da foto. -#}
+{% macro radar(habilidades, codigos, rotulos, tam=180) -%}
+{%- if codigos|length == 4 -%}
+{%- set DIR = [(0, -1), (1, 0), (0, 1), (-1, 0)] -%}
+{%- set NIVEL = {'consolidada': 'domina', 'em desenvolvimento': 'parcial', 'lacuna': 'reforço', 'insuficiente': 'poucos itens'} -%}
+{%- set r = tam * 0.36 -%}
+{%- set cy = tam / 2 -%}
+{%- set cx = r + 136 -%}
+{%- set larg = '%.0f'|format(2 * cx) -%}
+<svg class="radar-svg" role="img" viewBox="0 0 {{ larg }} {{ tam }}" width="{{ larg }}" height="{{ tam }}" aria-label="Perfil por habilidade, em percentual de acerto: {% for c in codigos %}{% set h = habilidades[c] %}{{ c }} ({{ rotulos[c] }}) {{ 'pendente' if h.percentual is none else (100 * h.percentual)|round|int ~ '%, ' ~ NIVEL[h.nivel] }}{{ '; ' if not loop.last else '.' }}{% endfor %}">
+  {%- for f in [1, 0.75, 0.5] %}
+  <polygon class="radar-anel{{ ' radar-anel-' ~ (100 * f)|int if f < 1 }}" points="{% for dx, dy in DIR %}{{ '%.1f,%.1f '|format(cx + dx * r * f, cy + dy * r * f) }}{% endfor %}"/>
+  {%- endfor %}
+  {%- for dx, dy in DIR %}
+  <line class="radar-eixo" x1="{{ '%.1f'|format(cx) }}" y1="{{ '%.1f'|format(cy) }}" x2="{{ '%.1f'|format(cx + dx * r) }}" y2="{{ '%.1f'|format(cy + dy * r) }}"/>
+  {%- endfor %}
+  {%- for f in [75, 50] %}
+  <line class="radar-anel radar-anel-{{ f }}" x1="4" y1="{{ 12 + 14 * loop.index0 }}" x2="22" y2="{{ 12 + 14 * loop.index0 }}"/>
+  <text class="radar-escala" x="26" y="{{ 15 + 14 * loop.index0 }}">{{ f }}%</text>
+  {%- endfor %}
+  <polygon class="radar-area" points="{% for c in codigos %}{% set v = habilidades[c].percentual or 0 %}{{ '%.1f,%.1f '|format(cx + DIR[loop.index0][0] * r * v, cy + DIR[loop.index0][1] * r * v) }}{% endfor %}"/>
+  {%- for c in codigos %}{% set h = habilidades[c] %}{% set dx, dy = DIR[loop.index0] %}{% set v = h.percentual or 0 %}
+  <circle class="radar-ponto {{ 'radar-pendente' if h.percentual is none else 'n-' ~ CLASSE[h.nivel] }}" cx="{{ '%.1f'|format(cx + dx * r * v) }}" cy="{{ '%.1f'|format(cy + dy * r * v) }}" r="4.5"><title>{{ c }} · {{ rotulos[c] }}: {{ h.acertos }}/{{ h.validas }} ({{ 'pendente' if h.percentual is none else NIVEL[h.nivel] }})</title></circle>
+  <text class="radar-rotulo" x="{{ '%.1f'|format(cx + dx * (r + 8)) }}" y="{{ '%.1f'|format(cy + dy * (r + 8) + (4 if dy == 0 else (12 if dy > 0 else 0))) }}" text-anchor="{{ 'start' if dx > 0 else ('end' if dx < 0 else 'middle') }}">{{ c }} · {{ 'pendente' if h.percentual is none else (100 * h.percentual)|round|int ~ '%' }}</text>
+  {%- endfor %}
+</svg>
+{%- endif %}
+{%- endmacro %}
