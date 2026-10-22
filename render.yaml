@@ -1,0 +1,22 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec). Fica na raiz do repositorio da demo.
+services:
+  - type: web
+    name: clavia-demo
+    runtime: docker
+    plan: starter            # Starter nao dorme; o Free dorme apos 15 min sem acesso
+    region: virginia         # regiao do Render mais proxima do Brasil
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/saude
+    autoDeploy: false        # deploy manual: nada vai ao ar sem decisao humana
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: CLAVIA_LIMITE_MB      # tamanho maximo da foto
+        value: "8"
+      - key: CLAVIA_TIMEOUT_S      # tempo maximo de correcao por imagem
+        value: "20"
+      - key: CLAVIA_CONCORRENCIA   # correcoes simultaneas; cada uma e um processo filho (0,5 CPU / 512 MB no Starter)
+        value: "1"
+    domains:
+      - clavia.gtesolucoes.com.br

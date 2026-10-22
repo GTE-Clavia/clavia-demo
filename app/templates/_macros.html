@@ -1,0 +1,20 @@
+{% set CLASSE = {'consolidada': 'consolidada', 'em desenvolvimento': 'desenvolvimento', 'lacuna': 'lacuna', 'insuficiente': 'insuficiente'} %}
+{% set ROTULO = {'consolidada': '✓ domina', 'em desenvolvimento': 'parcial', 'lacuna': 'reforço', 'insuficiente': 'poucos itens'} %}
+
+{% macro celula(h, codigo) -%}
+<div>
+  <div class="cel n-{{ CLASSE[h.nivel] }}" title="{{ codigo }}: {{ h.nivel }}">
+    <b>{{ h.acertos }}/{{ h.validas }}</b><span class="r">{{ ROTULO[h.nivel] }}</span>
+  </div>
+  <div class="cel-codigo">{{ codigo }}</div>
+</div>
+{%- endmacro %}
+
+{% macro legenda() -%}
+<p class="legenda" aria-label="Legenda dos níveis">
+  <span><i class="n-consolidada"></i>✓ domina (≥ 75%)</span>
+  <span><i class="n-desenvolvimento"></i>parcial (50-74%)</span>
+  <span><i class="n-lacuna"></i>reforço (&lt; 50%)</span>
+  <span><i class="n-insuficiente"></i>poucos itens (menos de 3 válidos)</span>
+</p>
+{%- endmacro %}

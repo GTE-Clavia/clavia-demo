@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Testar a correção · Clavia{% endblock %}
+{% block conteudo %}
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Demonstração sem login</p>
+    <h1>Teste a correção por foto</h1>
+    <p class="lead">É o código real do protótipo: o mesmo que foi medido em bancada. Prova de exemplo <span class="code">{{ gabarito.prova }}</span>, Matemática do 6º ano, 20 questões em 4 habilidades da BNCC (itens e gabarito fictícios).</p>
+    <p class="nota nota-lgpd" role="note"><strong>Privacidade (LGPD).</strong> Não fotografe rosto nem escreva nome de aluno real na folha. A foto vai para o servidor da demonstração (Render, fora do Brasil), é processada em memória e descartada ao fim da correção: a foto não é registrada nem gravada. A plataforma de hospedagem pode manter registros técnicos de acesso (IP, rota, status). Não há cadastro, cookies nem analytics.</p>
+  </div>
+</section>
+
+<section class="passos-demo" aria-labelledby="p1">
+  <div class="wrap grid-2">
+    <div>
+      <h2 id="p1">1. Baixe a folha</h2>
+      <p>Folha A4 gerada pelo protótipo para um aluno de exemplo: marcadores nos cantos, QR Code com prova e aluno, 20 questões e o código do aluno em bolhas já preenchidas.</p>
+      <div class="acoes"><a class="btn" href="/folha.pdf" target="_blank" rel="noopener">Baixar a folha (PDF)</a></div>
+    </div>
+    <details id="guia">
+      <summary>Guia de preenchimento e de foto</summary>
+      <ol>
+        <li>Imprima em tamanho real (100%, sem "ajustar à página"). O quadrado preto do canto deve medir 14 mm.</li>
+        <li>Deixe o campo "Nome" em branco: a folha já identifica o aluno pelo código.</li>
+        <li>Pinte toda a bolha da alternativa escolhida, uma só por questão, com caneta azul ou preta ou lápis escuro.</li>
+        <li>Não mexa nas bolhas do código do aluno, no rodapé da folha.</li>
+        <li>Fotografe a folha inteira, com os 4 quadrados dos cantos visíveis, sem flash e sem "modo documento". Luz uniforme ajuda.</li>
+        <li>Envie a foto abaixo: JPG, PNG{% if heic %} ou HEIC (iPhone){% endif %}, até {{ limite_mb|int }} MB.</li>
+      </ol>
+    </details>
+  </div>
+</section>
+
+<section aria-labelledby="p2">
+  <div class="wrap">
+    <h2 id="p2">2. Fotografe e envie</h2>
+    <div class="envio">
+      <div class="arquivo">
+        <label for="foto"><strong>Sua foto da folha preenchida</strong></label>
+        <p class="pequeno muted">JPG, PNG{% if heic %} ou HEIC{% endif %} · até {{ limite_mb|int }} MB</p>
+        <input id="foto" type="file" accept="image/jpeg,image/png{% if heic %},image/heic,image/heif,.heic,.heif{% endif %}" data-limite="{{ (limite_mb * 1024 * 1024)|int }}">
+      </div>
+      <div class="card">
+        <p><strong>Sem folha impressa?</strong> Use uma foto de exemplo da bancada: folhas preenchidas por simulador e degradadas como foto de celular.</p>
+        <div class="exemplos">
+          <button class="btn btn-peq" type="button" data-exemplo="leve">Foto de exemplo: leve</button>
+          <button class="btn btn-peq" type="button" data-exemplo="medio">médio</button>
+          <button class="btn btn-peq" type="button" data-exemplo="severo">severo</button>
+        </div>
+        <p class="pequeno muted">Nas fotos de exemplo as respostas foram sorteadas pelo simulador. Por isso a nota sai baixa e as habilidades aparecem como reforço: o teste ali é a leitura, não o aluno. Perfis variados aparecem na turma do passo 3.</p>
+      </div>
+    </div>
+    <p id="estado" role="status" aria-live="polite"></p>
+
+    <div id="resultado" class="resultado" aria-labelledby="res-tit">
+      <h3 id="res-tit">Resultado da correção</h3>
+      <div class="res-grid">
+        <figure>
+          <img id="img-leitura" class="leitura-img" alt="Folha retificada com as bolhas lidas desenhadas por cima">
+          <figcaption>Folha retificada pelo protótipo. Verde: bolha marcada · laranja: zona de dúvida · cinza: vazia · moldura: questão enviada à revisão.</figcaption>
+        </figure>
+        <div>
+          <div class="resumo">
+            <div><b id="r-nota">-</b><span>nota 0-10 (sem as pendentes)</span></div>
+            <div><b id="r-revisao">-</b><span>questões para conferir</span></div>
+            <div><b id="r-tempo">-</b><span>tempo neste servidor</span></div>
+          </div>
+          <p id="r-id" class="pequeno"></p>
+          <p id="r-folha" class="pequeno"></p>
+
+          <h3>Microdiagnóstico do aluno</h3>
+          <div id="r-diag" class="barra"></div>
+          {{ m.legenda() }}
+
+          <div class="revisao">
+            <h3>Para o professor conferir</h3>
+            <p class="pequeno muted">Simulação: a conferência fica só no seu navegador. Questão conferida volta ao cálculo da nota e do diagnóstico.</p>
+            <ul id="r-revisao-lista"></ul>
+          </div>
+        </div>
+      </div>
+      <details>
+        <summary>Respostas lidas, questão a questão</summary>
+        <div class="tabela-rolagem">
+          <table>
+            <thead><tr><th class="c">Questão</th><th class="c">Lida</th><th class="c">Gabarito</th><th>Habilidade</th><th>Confiança*</th><th>Situação</th></tr></thead>
+            <tbody id="r-tabela"></tbody>
+          </table>
+        </div>
+        <p class="pequeno muted">* Escore heurístico de 0 a 1, não é probabilidade calibrada.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="p3">
+  <div class="wrap">
+    <h2 id="p3">3. Turma</h2>
+    <p class="lead">Mapa aluno × habilidade de uma turma de demonstração: {{ turma.n_alunos }} alunos <strong>sintéticos</strong>, com perfis de domínio diferentes, cujas folhas foram simuladas como fotos (nível médio) e corrigidas pelo mesmo código. Não são alunos reais.</p>
+    <p class="pequeno muted">Sem revisão humana aplicada: {{ turma.pendentes }} questões pendentes ficam fora do cálculo até o professor conferir.</p>
+    {{ m.legenda() }}
+    <div class="tabela-rolagem">
+      <table class="mapa">
+        <thead>
+          <tr><th>Aluno</th>{% for c in turma.codigos %}<th class="c"><span class="code">{{ c }}</span><br><span class="pequeno muted">{{ turma.rotulos[c] }}</span></th>{% endfor %}<th class="c">Nota</th><th class="c">Pendentes</th></tr>
+        </thead>
+        <tbody>
+          <tr class="resumo-turma"><td>Turma</td>{% for c in turma.codigos %}{% set t = turma.turma[c] %}<td class="c">{{ (100 * t.percentual_acerto)|round|int }}% de acerto<br>{{ t.alunos_com_lacuna|length }} em reforço</td>{% endfor %}<td></td><td></td></tr>
+          {% for a, d in turma.alunos.items() %}
+          <tr>
+            <th scope="row" class="code">{{ a }}</th>
+            {% for c in turma.codigos %}{% set h = d.habilidades[c] %}<td class="cel-t n-{{ m.CLASSE[h.nivel] }}">{{ h.acertos }}/{{ h.validas }} {{ m.ROTULO[h.nivel] }}</td>{% endfor %}
+            <td class="c num">{{ '%.1f'|format(d.nota_0a10)|replace('.', ',') }}</td>
+            <td class="c num">{{ d.pendentes_revisao }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <h3>Perfis de lacuna (a base do agrupamento)</h3>
+    <ul>
+      {% for g in turma.grupos[:6] %}<li><span class="code">{{ g.perfil }}</span>: {{ g.n }} aluno{{ 's' if g.n > 1 }}</li>{% endfor %}
+    </ul>
+    <p class="pequeno muted">Com 5 itens por habilidade, o nível é um sinal para o professor, não uma medida psicométrica.</p>
+  </div>
+</section>
+
+<section id="agir" aria-labelledby="p4">
+  <div class="wrap">
+    <h2 id="p4">4. Agir <span class="selo selo-dev">em desenvolvimento</span></h2>
+    <p class="lead">O quarto verbo ainda não existe como software. Abaixo, as telas de conceito que o projeto vai construir: o plano da semana para a turma e o Plano Individual de Aprendizagem (PIA). Tudo passa pela aprovação do professor.</p>
+    <div class="grid-2">
+      <figure class="fig-conceito">
+        <span class="selo selo-conceito">Conceito de tela · a construir no projeto</span>
+        <img src="/static/img/mockup_agir_turma.jpg" alt="Conceito de tela do módulo Agir: turma agrupada pelo tipo de erro em EF06MA07 e sequência de 4 aulas sugerida" loading="lazy" width="1440" height="900">
+        <figcaption>Turma agrupada pelo tipo de erro, com sequência de 4 aulas sugerida. Dados fictícios.</figcaption>
+      </figure>
+      <figure class="fig-conceito">
+        <span class="selo selo-conceito">Conceito de tela · a construir no projeto</span>
+        <img src="/static/img/mockup_pia.jpg" alt="Conceito de tela do PIA: células por habilidade, meta, intervenções em sala e em casa, acessibilidade, reavaliação e mensagem para a família" loading="lazy" width="1440" height="900">
+        <figcaption>Plano Individual de Aprendizagem de uma aluna fictícia. Dados fictícios.</figcaption>
+      </figure>
+    </div>
+    <h3>Trecho do PIA de exemplo</h3>
+    <p class="pequeno muted">Aluna, turma, professora e datas fictícias. Conceito de produto, a ser construído no projeto.</p>
+    <blockquote>
+      <p><strong>Por que a Clavia sugere começar por <span class="code">EF06MA07</span>.</strong> Os erros dos itens 3, 4, 6 e 8 têm a mesma raiz: a Luana lê uma fração (e um decimal) como dois números naturais separados, e não como um número com tamanho. <span class="code">EF06MA07</span> vem antes de <span class="code">EF06MA08</span> e <span class="code">EF06MA10</span> na progressão da BNCC. Trabalhar o tamanho da fração e a equivalência primeiro tende a destravar parte dos erros das outras duas. Isso é hipótese pedagógica, e a reavaliação vai mostrar se se confirmou.</p>
+      <p><strong>Meta do ciclo (até 04/10).</strong> Acertar pelo menos 4 de 5 itens da microavaliação de saída de <span class="code">EF06MA07</span> sem marcar o distrator do erro E1, verificado por correção por foto.</p>
+      <p><strong>Em sala.</strong> Sequência de 4 aulas com instrução por pares, rotação por estações e problema curto; na rotação, ela fica no grupo "Tamanho da fração" (9 alunos). Os grupos valem até a reavaliação e são refeitos depois.</p>
+    </blockquote>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/demo.js" defer></script>{% endblock %}

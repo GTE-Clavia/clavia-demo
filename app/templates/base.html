@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Clavia{% endblock %}</title>
+  <meta name="description" content="Clavia: a prova em papel, fotografada pelo professor, vira diagnóstico por habilidade da BNCC. Demonstração do protótipo de correção por foto.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="/static/img/simbolo_clavia.png">
+  <link rel="stylesheet" href="/static/css/clavia.css">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <header class="topo">
+    <div class="wrap">
+      <a class="marca" href="/" aria-label="Clavia, página inicial"><img src="/static/img/logo_clavia.png" alt="Clavia" width="120" height="40"></a>
+      <span class="selo selo-demo">Demonstração do protótipo</span>
+      <nav aria-label="Principal">
+        <a href="/" {% if ativo == 'inicio' %}aria-current="page"{% endif %}>Início</a>
+        <a href="/demo" {% if ativo == 'demo' %}aria-current="page"{% endif %}>Testar a correção</a>
+        <a href="/evidencia" {% if ativo == 'evidencia' %}aria-current="page"{% endif %}>Evidência</a>
+      </nav>
+    </div>
+  </header>
+  <main id="conteudo">
+    {% block conteudo %}{% endblock %}
+  </main>
+  <footer class="rodape">
+    <div class="wrap">
+      <p><strong>Proposta ao Programa Centelha 3 RJ (FAPERJ, Edital 12/2026). Demonstração em evolução - versão de {{ versao }}.</strong></p>
+      <p class="sec">Clavia é um projeto da GTE Soluções (RJ). Esta demonstração não tem cadastro, cookies nem analytics. A foto enviada é processada em memória e descartada ao fim da correção: não é registrada nem gravada. A plataforma de hospedagem pode manter registros técnicos de acesso (IP, rota, status).</p>
+      <p class="sec">Rótulos usados no site: <em>medido em bancada</em> (teste com imagens sintéticas, não fotos reais), <em>em desenvolvimento</em> (parte do plano do projeto) e <em>conceito de tela</em> (desenho, ainda não construído).</p>
+    </div>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

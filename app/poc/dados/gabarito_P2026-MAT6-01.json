@@ -1,0 +1,55 @@
+{
+ "prova": "P2026-MAT6-01",
+ "componente": "Matematica",
+ "ano": "6o ano do Ensino Fundamental",
+ "observacao": "Gabarito e itens ficticios, criados para a prova de conceito. Codigos, textos, unidades tematicas e objetos de conhecimento das habilidades sao os oficiais da BNCC.",
+ "fonte_bncc": "BNCC, versao final homologada (MEC), Matematica 6o ano, p. 300-303. https://basenacionalcomum.mec.gov.br/images/BNCC_EI_EF_110518_versaofinal_site.pdf",
+ "habilidades": {
+  "EF06MA01": {
+   "texto": "Comparar, ordenar, ler e escrever números naturais e números racionais cuja representação decimal é finita, fazendo uso da reta numérica.",
+   "unidade_tematica": "Números",
+   "objeto_de_conhecimento": "Sistema de numeração decimal: características, leitura, escrita e comparação de números naturais e de números racionais representados na forma decimal",
+   "rotulo_curto": "Ler e comparar naturais e decimais"
+  },
+  "EF06MA07": {
+   "texto": "Compreender, comparar e ordenar frações associadas às ideias de partes de inteiros e resultado de divisão, identificando frações equivalentes.",
+   "unidade_tematica": "Números",
+   "objeto_de_conhecimento": "Frações: significados (parte/todo, quociente), equivalência, comparação, adição e subtração; cálculo da fração de um número natural; adição e subtração de frações",
+   "rotulo_curto": "Frações: significado e equivalência"
+  },
+  "EF06MA13": {
+   "texto": "Resolver e elaborar problemas que envolvam porcentagens, com base na ideia de proporcionalidade, sem fazer uso da “regra de três”, utilizando estratégias pessoais, cálculo mental e calculadora, em contextos de educação financeira, entre outros.",
+   "unidade_tematica": "Números",
+   "objeto_de_conhecimento": "Cálculo de porcentagens por meio de estratégias diversas, sem fazer uso da “regra de três”",
+   "rotulo_curto": "Porcentagem por proporcionalidade"
+  },
+  "EF06MA24": {
+   "texto": "Resolver e elaborar problemas que envolvam as grandezas comprimento, massa, tempo, temperatura, área (triângulos e retângulos), capacidade e volume (sólidos formados por blocos retangulares), sem uso de fórmulas, inseridos, sempre que possível, em contextos oriundos de situações reais e/ou relacionadas às outras áreas do conhecimento.",
+   "unidade_tematica": "Grandezas e medidas",
+   "objeto_de_conhecimento": "Problemas sobre medidas envolvendo grandezas como comprimento, massa, tempo, temperatura, área, capacidade e volume",
+   "rotulo_curto": "Problemas com grandezas e medidas"
+  }
+ },
+ "questoes": [
+  {"q": 1, "gabarito": "C", "habilidade": "EF06MA01"},
+  {"q": 2, "gabarito": "A", "habilidade": "EF06MA01"},
+  {"q": 3, "gabarito": "D", "habilidade": "EF06MA01"},
+  {"q": 4, "gabarito": "B", "habilidade": "EF06MA01"},
+  {"q": 5, "gabarito": "E", "habilidade": "EF06MA01"},
+  {"q": 6, "gabarito": "B", "habilidade": "EF06MA07"},
+  {"q": 7, "gabarito": "D", "habilidade": "EF06MA07"},
+  {"q": 8, "gabarito": "A", "habilidade": "EF06MA07"},
+  {"q": 9, "gabarito": "C", "habilidade": "EF06MA07"},
+  {"q": 10, "gabarito": "E", "habilidade": "EF06MA07"},
+  {"q": 11, "gabarito": "A", "habilidade": "EF06MA13"},
+  {"q": 12, "gabarito": "C", "habilidade": "EF06MA13"},
+  {"q": 13, "gabarito": "B", "habilidade": "EF06MA13"},
+  {"q": 14, "gabarito": "E", "habilidade": "EF06MA13"},
+  {"q": 15, "gabarito": "D", "habilidade": "EF06MA13"},
+  {"q": 16, "gabarito": "D", "habilidade": "EF06MA24"},
+  {"q": 17, "gabarito": "B", "habilidade": "EF06MA24"},
+  {"q": 18, "gabarito": "E", "habilidade": "EF06MA24"},
+  {"q": 19, "gabarito": "A", "habilidade": "EF06MA24"},
+  {"q": 20, "gabarito": "C", "habilidade": "EF06MA24"}
+ ]
+}

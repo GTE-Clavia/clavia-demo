@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block titulo %}Evidência · Clavia{% endblock %}
+{% block conteudo %}
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Evidência · relatório da prova de conceito de 22/10/2026</p>
+    <h1>Teste de bancada da correção por foto <span class="selo selo-bancada">medido em bancada</span></h1>
+    <p class="nota"><strong>Natureza da evidência.</strong> Folhas geradas pelo próprio sistema, preenchidas por um simulador de marcações e degradadas por um simulador de "foto de celular". <strong>Não são fotos reais.</strong> O teste mostra que o pipeline existe, funciona de ponta a ponta e é conservador (sinaliza o que não sabe). Ele não mede a acurácia em campo: isso é o protocolo de fotos reais, mais abaixo.</p>
+    <p>300 folhas por nível de degradação (900 no total, 18.000 questões), semente de teste 2026, com mistura deliberadamente hostil: 88% de marcação simples (cheia, parcial ou fraca, a caneta ou a lápis), 5% em branco, 3% de dupla marcação e 4% de rasura. Os limiares de decisão foram fixados antes da primeira rodada e não mudaram; a semente de teste rodou uma única vez, na versão final.</p>
+  </div>
+</section>
+
+<section aria-labelledby="tab-tit">
+  <div class="wrap">
+    <h2 id="tab-tit">Resultados por nível de degradação</h2>
+    <div class="tabela-rolagem">
+      <table>
+        <thead><tr><th>Métrica</th><th class="c">leve</th><th class="c">médio</th><th class="c">severo</th></tr></thead>
+        <tbody class="num">
+          <tr><td>Folhas / questões</td><td class="c">300 / 6.000</td><td class="c">300 / 6.000</td><td class="c">300 / 6.000</td></tr>
+          <tr><td>Largura média da folha na foto (px)</td><td class="c">1.946</td><td class="c">1.449</td><td class="c">1.028</td></tr>
+          <tr><td>Folha localizada e retificada</td><td class="c">100%</td><td class="c">100%</td><td class="c">100%</td></tr>
+          <tr><td>QR lido corretamente</td><td class="c">100%</td><td class="c">94,0%</td><td class="c"><strong>52,3%</strong></td></tr>
+          <tr><td>QR lido com valor errado</td><td class="c">0</td><td class="c">0</td><td class="c">0</td></tr>
+          <tr><td>Aluno identificado (QR ou código em bolhas)</td><td class="c">100%</td><td class="c">100%</td><td class="c">100%</td></tr>
+          <tr><td>... só pelo código em bolhas (QR falhou)</td><td class="c">0%</td><td class="c">6,0%</td><td class="c">47,7%</td></tr>
+          <tr><td>Aluno identificado errado</td><td class="c">0</td><td class="c">0</td><td class="c">0</td></tr>
+          <tr><td>Acurácia automática por questão</td><td class="c">100,00%</td><td class="c">100,00%</td><td class="c">99,58%</td></tr>
+          <tr><td>Acurácia nas questões não sinalizadas</td><td class="c">100,000%</td><td class="c">100,000%</td><td class="c">99,979%</td></tr>
+          <tr><td>Questões sinalizadas para revisão (total)</td><td class="c">13,4%</td><td class="c">13,7%</td><td class="c">19,1%</td></tr>
+          <tr><td>... das quais em branco/dupla (sinalização esperada)</td><td class="c">8,1%</td><td class="c">7,6%</td><td class="c">7,6%</td></tr>
+          <tr><td>Sinalização extra em marcações simples</td><td class="c">5,8%</td><td class="c">6,6%</td><td class="c">12,4%</td></tr>
+          <tr><td>Folhas 100% corretas sem revisão humana</td><td class="c">100%</td><td class="c">100%</td><td class="c">92,7%</td></tr>
+          <tr><td>Folhas 100% corretas após a revisão das sinalizadas</td><td class="c">100%</td><td class="c">100%</td><td class="c">99,7%</td></tr>
+          <tr><td><strong>Erro silencioso</strong> (lido errado e não sinalizado)</td><td class="c"><strong>0 em 6.000</strong></td><td class="c"><strong>0 em 6.000</strong></td><td class="c"><strong>1 em 6.000 (0,017%)</strong></td></tr>
+          <tr><td>IC 95% do erro silencioso (Wilson)</td><td class="c">0 a 0,064%</td><td class="c">0 a 0,064%</td><td class="c">0,003% a 0,094%</td></tr>
+          <tr><td>Tempo por folha, 1 processo (média; p95)*</td><td class="c">101 ms; 110 ms</td><td class="c">156 ms; 502 ms</td><td class="c">278 ms; 524 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pequeno muted">* Execução sequencial (30 folhas por nível) num notebook Intel com Windows 11, Python 3.14 e OpenCV 4.13; inclui decodificar o JPEG e toda a correção, não inclui tirar a foto nem a revisão. Não medimos em celular. O tempo mostrado na demonstração é o deste servidor.</p>
+  </div>
+</section>
+
+<section aria-labelledby="fig-tit">
+  <div class="wrap">
+    <h2 id="fig-tit">Figuras</h2>
+    <div class="grid-2">
+      <figure class="card">
+        <img src="/static/fig/fig_metricas_por_nivel.png" alt="Gráficos por nível: acurácia, folhas 100% corretas, taxa de revisão e erro silencioso com intervalo de confiança" loading="lazy">
+        <figcaption>Acurácia, folhas 100% corretas, taxa de revisão e erro silencioso com IC 95%, por nível.</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="/static/fig/fig_distribuicao_preenchimento.png" alt="Distribuição do preenchimento medido por tipo de bolha, com os dois limiares de decisão" loading="lazy">
+        <figcaption>Preenchimento medido por tipo de bolha (vazia, rasura, fraca, parcial, lápis, caneta) e os dois limiares. Mostra por que a marca fraca cai na zona de dúvida.</figcaption>
+      </figure>
+      <figure class="card">
+        <a href="/static/fig/fig_exemplos_pipeline.png"><img src="/static/img/fig_exemplos_pipeline.jpg" alt="Para cada nível, a foto simulada e a folha retificada com as bolhas lidas sobrepostas" loading="lazy"></a>
+        <figcaption>Para cada nível, a foto simulada e a folha retificada com as bolhas lidas (clique para a versão em alta resolução).</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="/static/fig/fig_microdiagnostico_turma.png" alt="Mapa de calor aluno por habilidade da turma de demonstração com 30 alunos sintéticos" loading="lazy">
+        <figcaption>Microdiagnóstico da turma de demonstração (30 alunos sintéticos, nível médio).</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="lim-tit">
+  <div class="wrap grid-2">
+    <div>
+      <h2 id="lim-tit">Falhas e limites encontrados</h2>
+      <ol>
+        <li><strong>QR em papel amassado.</strong> No nível severo o QR só foi lido em 52,3% das folhas. A causa é a deformação do papel, não a nitidez. Solução adotada: o código do aluno também vai impresso em bolhas, e a identificação chegou a 100% nos três níveis, sem nenhum aluno trocado.</li>
+        <li><strong>Um erro silencioso no severo</strong> (folha S009, questão 20): dupla marcação a lápis lida como uma só, porque o amassado deslocou a linha cerca de 3 mm. A correção proposta não foi aplicada, para não ajustar o algoritmo ao conjunto de teste.</li>
+        <li><strong>Custo de revisão.</strong> Com esta mistura hostil, poucas folhas saem sem nenhuma sinalização. A revisão precisa ser por questão (2 a 4 por folha), não folha a folha.</li>
+        <li><strong>O que o simulador não cobre:</strong> reflexo de flash, folha cortada na foto, dobra sobre um marcador, "X" no lugar de pintar a bolha, impressão fora de escala, tinta que atravessa o papel.</li>
+        <li><strong>Microdiagnóstico.</strong> Com 5 itens por habilidade, o nível é indicativo, não uma medida psicométrica.</li>
+      </ol>
+    </div>
+    <figure class="card">
+      <img src="/static/fig/erro_silencioso_severo_S009_foto.jpg" alt="Foto simulada da folha S009, nível severo, onde ocorreu o único erro silencioso" loading="lazy">
+      <figcaption>A foto simulada da folha S009, o único erro silencioso da bancada, publicada para auditoria.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section aria-labelledby="prot-tit">
+  <div class="wrap grid-2">
+    <div>
+      <h2 id="prot-tit">Protocolo de fotos reais <span class="selo selo-dev">a executar</span></h2>
+      <p>O próximo passo troca a bancada por fotos de celular de verdade, com folhas impressas e preenchidas à mão. O protocolo está pronto e ainda não foi executado; no projeto, a leitura será aferida em 600 ou mais fotos reais.</p>
+      <ol>
+        <li>Gerar 30 folhas (alunos A001 a A030) e a lista do que marcar em cada questão, que é a verdade de campo.</li>
+        <li>Imprimir em tamanho real e preencher com caneta azul, caneta preta e lápis; 5 folhas levemente amassadas.</li>
+        <li>Fotografar cada folha uma vez por celular (2 ou 3 aparelhos, um deles modesto), em três condições: luz da sala, sombra e ângulo inclinado. Sem flash, sem modo documento, sem passar pelo WhatsApp.</li>
+        <li>Corrigir em lote e gerar a tabela com as mesmas métricas da bancada, a começar pelo erro silencioso.</li>
+      </ol>
+      <p>Erro encontrado é reportado com a causa. Foto não é refeita para melhorar o resultado.</p>
+    </div>
+    <div class="card">
+      <h3>Código e reprodutibilidade</h3>
+      <p>Código-fonte: <a href="https://github.com/GTE-Clavia/clavia-demo">github.com/GTE-Clavia/clavia-demo</a>.</p>
+      <p>Todos os números desta página foram produzidos por scripts com semente fixa e podem ser reproduzidos. Esta demonstração roda o mesmo código de correção e de diagnóstico medido na bancada.</p>
+      <p class="pequeno muted">Habilidades usadas: <span class="code">EF06MA01</span>, <span class="code">EF06MA07</span>, <span class="code">EF06MA13</span> e <span class="code">EF06MA24</span> (códigos e textos oficiais da BNCC, Matemática 6º ano). Os itens e o gabarito da prova de exemplo são fictícios.</p>
+      <div class="acoes"><a class="btn btn-cta" href="/demo">Testar a correção</a></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

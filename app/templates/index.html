@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block titulo %}Clavia · a prova em papel vira diagnóstico por habilidade{% endblock %}
+{% block conteudo %}
+<section class="hero">
+  <div class="wrap grid-2">
+    <div>
+      <p class="eyebrow">Matemática · 6º e 7º anos · escola pública</p>
+      <h1>A prova em papel vira diagnóstico por habilidade da BNCC.</h1>
+      <p class="lead">O professor aplica a prova em papel e fotografa as folhas. A Clavia identifica o aluno, lê as marcações, devolve a dúvida para o professor conferir e mostra, por habilidade, quem precisa de reforço em quê. É pré-correção por IA com grau de certeza por questão: a nota e a decisão são sempre do professor.</p>
+      <div class="acoes">
+        <a class="btn btn-cta" href="/demo">Testar a correção</a>
+        <a class="btn" href="/evidencia">Ver a evidência</a>
+      </div>
+    </div>
+    {% set ex = turma.alunos['A001'] %}
+    <div class="card" aria-labelledby="ex-tit">
+      <p class="eyebrow" id="ex-tit">Microdiagnóstico de um aluno</p>
+      <p class="muted pequeno">Aluno sintético A001 da turma de demonstração · nota {{ '%.1f'|format(ex.nota_0a10)|replace('.', ',') }} · lido de uma foto simulada</p>
+      <div class="barra">
+        {% for c in turma.codigos %}{{ m.celula(ex.habilidades[c], c) }}{% endfor %}
+      </div>
+      <p class="pequeno">A nota diz pouco. As células mostram onde agir: reforço em <span class="code">{{ ex.lacunas|join('</span> e <span class="code">'|safe) }}</span>.</p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="ciclo-tit">
+  <div class="wrap">
+    <h2 id="ciclo-tit">O ciclo em quatro verbos</h2>
+    <p class="lead">Cada item da prova aponta uma habilidade da BNCC. O erro do aluno vira o ponto de partida da aula seguinte.</p>
+    <ol class="ciclo">
+      <li>
+        <h3>Avaliar</h3>
+        <p>Folha de respostas A4 com QR Code e código do aluno em bolhas. Nada de nome na folha: só o código.</p>
+        <span class="selo selo-bancada">no protótipo</span>
+      </li>
+      <li>
+        <h3>Corrigir</h3>
+        <p>Visão computacional localiza a folha, corrige a perspectiva e lê cada bolha. O que é duvidoso volta ao professor.</p>
+        <span class="selo selo-bancada">medido em bancada</span>
+      </li>
+      <li>
+        <h3>Diagnosticar</h3>
+        <p>Acerto por habilidade BNCC, por aluno e por turma, com os alunos agrupados pelo perfil de lacuna.</p>
+        <span class="selo selo-bancada">no protótipo</span>
+      </li>
+      <li class="dev">
+        <h3>Agir</h3>
+        <p>Plano Individual de Aprendizagem, grupos temporários por erro típico e sequência didática para a semana seguinte.</p>
+        <span class="selo selo-dev">em desenvolvimento</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section aria-labelledby="quem-tit">
+  <div class="wrap grid-2">
+    <div>
+      <h2 id="quem-tit">Para quem</h2>
+      <p class="lead">Para o professor de Matemática dos anos finais da escola pública, começando pelo 6º e 7º anos.</p>
+    </div>
+    <div>
+      <p>Ele aplica prova em papel, corrige à mão e só descobre quem não aprendeu o quê quando o bimestre já virou. A Clavia quer encurtar esse caminho: da prova corrigida ao reforço da semana seguinte, com quem fazer e em qual habilidade.</p>
+      <p>A coordenação pedagógica vai ver a recomposição por turma. A secretaria de educação, só dados agregados.</p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="evid-tit">
+  <div class="wrap">
+    <p class="eyebrow">Evidência</p>
+    <h2 id="evid-tit">O que o protótipo já mostrou <span class="selo selo-bancada">medido em bancada</span></h2>
+    <p class="lead">Teste com 900 folhas sintéticas, preenchidas por simulador e degradadas para imitar fotos de celular em três níveis (leve, médio e severo).</p>
+    <div class="numeros">
+      <div class="card"><b>18.000</b>questões lidas em 900 folhas</div>
+      <div class="card"><b>0</b>erro silencioso em 12.000 questões dos níveis leve e médio</div>
+      <div class="card"><b>1 em 6.000</b>erro silencioso no nível severo</div>
+      <div class="card"><b>100%</b>dos alunos identificados, pelo QR Code ou pelo código em bolhas</div>
+      <div class="card"><b>13-19%</b>das questões vão para a revisão do professor: é o custo da segurança</div>
+      <div class="card"><b>0,10-0,28 s</b>por folha em notebook, sem contar a foto e a revisão</div>
+    </div>
+    <p class="nota"><strong>Erro silencioso</strong> é a questão lida errado e não sinalizada, o erro que chegaria ao aluno sem ninguém ver. Estes números vêm de imagens sintéticas, não de fotos reais. A validação com fotos reais, em sala, é uma etapa do projeto. <a href="/evidencia">Ver a tabela completa e os limites</a>.</p>
+  </div>
+</section>
+
+<section aria-labelledby="escopo-tit" class="escopo">
+  <div class="wrap">
+    <h2 id="escopo-tit">O que existe hoje e o que o projeto vai construir</h2>
+    <div class="grid-3">
+      <div class="card">
+        <span class="selo selo-bancada">protótipo · medido em bancada</span>
+        <h3>Funciona hoje</h3>
+        <ul>
+          <li>Folha de respostas com QR Code, marcadores nos cantos e código do aluno em bolhas.</li>
+          <li>Correção por foto com sinalização de dúvida (em branco, dupla marcação, marca fraca, rasura).</li>
+          <li>Microdiagnóstico por habilidade BNCC, do aluno e da turma.</li>
+        </ul>
+        <p class="pequeno muted">É o que você testa nesta demonstração.</p>
+      </div>
+      <div class="card">
+        <span class="selo selo-dev">MVP · 12 meses de projeto</span>
+        <h3>Escopo do MVP</h3>
+        <ul>
+          <li>Matemática do 6º e 7º anos.</li>
+          <li>240 itens, 20 sequências didáticas, 20 rubricas e 100 itens de saída.</li>
+          <li>App do professor no celular. Sem internet, ele só vai fotografar e guardar a folha; a correção acontece quando houver conexão.</li>
+          <li>Leitura aferida em fotos reais e piloto em escolas públicas do RJ.</li>
+        </ul>
+      </div>
+      <div class="card dev">
+        <span class="selo selo-conceito">conceito de tela</span>
+        <h3>Em desenvolvimento</h3>
+        <ul>
+          <li>Plano Individual de Aprendizagem (PIA) com meta e data de reavaliação.</li>
+          <li>Grupos temporários por erro típico, refeitos a cada microavaliação.</li>
+          <li>Sequências com metodologias ativas e adaptações de Desenho Universal para a Aprendizagem.</li>
+        </ul>
+        <p class="pequeno"><a href="/demo#agir">Ver as telas de conceito</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="equipe-tit">
+  <div class="wrap">
+    <h2 id="equipe-tit">Equipe</h2>
+    <div class="grid-3">
+      <div class="card pessoa">
+        <h3>Matheus Sales</h3>
+        <p class="papel">Proponente · produto, arquitetura e piloto</p>
+        <p>Sócio da GTE Soluções. Quase 17 anos em sistemas críticos na Globo, até Arquiteto de Soluções Sênior. Coordena o SIFRE, aprovado no Programa Prioridade Rio/FAPERJ.</p>
+        <p class="pequeno muted">Análise e Desenvolvimento de Sistemas (UVA) · MBA em Engenharia de Software (USP/ESALQ, em curso)</p>
+      </div>
+      <div class="card pessoa">
+        <h3>Fabiana Oliveira</h3>
+        <p class="papel">Âncora pedagógica</p>
+        <p>37 anos na rede pública do Rio de Janeiro, 10 deles como diretora de escola municipal. Valida o desenho do plano individual, dos grupos e das sequências.</p>
+        <p class="pequeno muted">Geografia (UERJ) · extensões em Coordenação Pedagógica e em Orientação Educacional</p>
+      </div>
+      <div class="card pessoa">
+        <h3>Gustavo Pereira</h3>
+        <p class="papel">Motor de IA e visão computacional</p>
+        <p>Aplica aprendizado de máquina e métodos bayesianos na Nuclep desde 2018. Responde pela qualidade da leitura e pelo modelo de diagnóstico.</p>
+        <p class="pequeno muted">Doutor em Engenharia Nuclear (UFRJ) · MBA em Inteligência Artificial (FIAP)</p>
+      </div>
+    </div>
+    <div class="acoes"><a class="btn btn-cta" href="/demo">Testar a correção</a></div>
+  </div>
+</section>
+{% endblock %}
